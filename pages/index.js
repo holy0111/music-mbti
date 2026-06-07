@@ -13,17 +13,25 @@ export default function Home() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setResult('');
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setResult('');
 
-    try {
-      const res = await fetch('/api/diagnose', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+  // 💡 送信する直前に、画面の選択状態（point1~3）がちゃんと入っているか再確認・補正する
+  const sendingData = {
+    ...formData,
+    point1: formData.point1 || 'メロディ',
+    point2: formData.point2 || 'メロディ',
+    point3: formData.point3 || 'メロディ'
+  };
+
+  try {
+    const res = await fetch('/api/diagnose', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(sendingData) // 💡 補正したデータを送る
+    });
       const data = await res.json();
       if (res.ok) {
         setResult(data.answer);
