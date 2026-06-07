@@ -85,7 +85,7 @@ export default function Home() {
           justify-content: center;
         }
         .container { 
-          max-width: 600px; /* PCでの最大幅 */
+          max-width: 800px; /* PCでの最大幅 */
           width: 100%;      /* スマホでは画面いっぱいに広がる */
         }
         h1 { text-align: center; font-size: clamp(1.2rem, 5vw, 1.5rem); color: #f0f6fc; margin-bottom: 20px; }
