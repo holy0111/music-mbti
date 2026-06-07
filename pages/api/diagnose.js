@@ -9,30 +9,40 @@ export default async function handler(req, res) {
 
   const DIFY_API_URL = 'https://api.dify.ai/v1/chat-messages';
   const DIFY_API_KEY = process.env.DIFY_API_KEY;
-  const GENIUS_ACCESS_TOKEN = 'ijB0kjIMOXKZTp16mKiWBPQCsWRmG-v9WzhH77ONsr9bStae3qOBLXnnOQIXbShm'; // Vercelの環境変数に設定するか、直接文字列で 'あなたのトークン' を入れてもOK
+  
+  // ★ここに あなたのGeniusトークンを直接シングルクォーテーションで囲んで貼り付けてください！
+  const GENIUS_ACCESS_TOKEN = 'ijB0kjIMOXKZTp16mKiWBPQCsWRmG-v9WzhH77ONsr9bStae3qOBLXnnOQIXbShm'; 
 
   if (!DIFY_API_KEY) {
     return res.status(500).json({ message: 'Dify API Key is not configured on the server.' });
   }
 
-  // Geniusから曲の情報を検索する内部関数
+  // Geniusから曲の情報を検索する内部関数（公式URL直接アクセス版）
   async function searchGenius(artist, title) {
     if (!artist || !title || !GENIUS_ACCESS_TOKEN) return "";
     try {
-      const geniusRes = await fetch(`https://0.comy.workers.dev:443/https/api.genius.com/search?q=${encodeURIComponent(artist + " " + title)}`, {
+      // 修正ポイント：0.comy.workers.dev を完全に削除し、公式URLへ直接fetchします
+      const geniusRes = await fetch(`https://api.genius.com/search?q=${encodeURIComponent(artist + " " + title)}`, {
         headers: { 'Authorization': `Bearer ${GENIUS_ACCESS_TOKEN}` }
       });
+
+      // 返ってきた中身がJSON（プログラム用データ）かどうかを確認するガード処理
+      const contentType = geniusRes.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        console.log(`Geniusから無効なデータが返されたためスルーします: ${artist} - ${title}`);
+        return ""; 
+      }
+
       const json = await geniusRes.json();
       const hits = json.response.hits;
       if (hits && hits.length > 0) {
-        // 最も検索マッチ度の高い1件目のメタデータと詳細URLを取得
         const song = hits[0].result;
         return ` (楽曲特定データ: Genius登録タイトル=${song.title}, アーティスト=${song.primary_artist.name}, 歌詞確認用URL=${song.url})`;
       }
       return "";
     } catch (e) {
-      console.error("Genius検索エラー:", e);
-      return "";
+      console.error("Genius検索エラー（ログ出力のみ）:", e);
+      return ""; 
     }
   }
 
@@ -45,7 +55,7 @@ export default async function handler(req, res) {
   if (point2 === '歌詞') lyricsData2 = await searchGenius(artist2, title2);
   if (point3 === '歌詞') lyricsData3 = await searchGenius(artist3, title3);
 
-  // Difyへのリクエストデータを作成（Geniusから見つけた詳細情報をポイントに追記）
+  // Difyへのリクエストデータを作成
   const requestData = {
     inputs: {
       artist1, 
@@ -96,7 +106,6 @@ export default async function handler(req, res) {
     } catch (e) {
       console.error("スプレッドシートへの保存に失敗しました", e);
     }
-    // --- ここまで ---
 
     return res.status(200).json({ answer: answer });
   } catch (error) {
