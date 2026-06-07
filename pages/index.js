@@ -60,15 +60,9 @@ export default function Home() {
                 <h3>{num}曲目</h3>
                 <input type="text" name={`artist${num}`} placeholder="アーティスト名" required onChange={handleChange} />
                 <input type="text" name={`title${num}`} placeholder="曲名" required onChange={handleChange} />
-                
-                {/* ここが横並びのポイントです */}
                 <div className="radio-group">
-                  <label>
-                    <input type="radio" name={`point${num}`} value="メロディ" defaultChecked onChange={handleChange} /> メロディが好き
-                  </label>
-                  <label>
-                    <input type="radio" name={`point${num}`} value="歌詞" onChange={handleChange} /> 歌詞が好き
-                  </label>
+                  <label><input type="radio" name={`point${num}`} value="メロディ" defaultChecked onChange={handleChange} /> メロディ</label>
+                  <label><input type="radio" name={`point${num}`} value="歌詞" onChange={handleChange} /> 歌詞</label>
                 </div>
               </div>
             ))}
@@ -93,18 +87,7 @@ export default function Home() {
         h1 { text-align: center; font-size: 1.5rem; color: #f0f6fc; margin-bottom: 20px; }
         .song-form { background: #161b22; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #30363d; }
         input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 4px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; }
-        
-        /* ラジオボタンの横並び設定 */
-        .radio-group { 
-          display: flex; 
-          flex-direction: row; 
-          align-items: center; 
-          gap: 15px; 
-          margin-top: 10px; 
-          font-size: 14px; 
-          white-space: nowrap; /* 強制的に改行させない */
-        }
-        
+        .radio-group { display: flex; gap: 20px; margin-top: 10px; font-size: 14px; }
         .btn-submit { width: 100%; padding: 16px; background: #238636; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
         .loading { text-align: center; padding: 40px; }
         .result-card { background: #161b22; padding: 25px; border-radius: 8px; border: 1px solid #30363d; }
