@@ -138,4 +138,152 @@ export default function Home() {
         .container {
           max-width: 600px;
           margin: 0 auto;
-          padding: 2
+          padding: 24px 16px;
+          color: var(--text-main);
+        }
+        h1 {
+          text-align: center;
+          font-size: 24px;
+          margin-bottom: 8px;
+        }
+        .subtitle {
+          text-align: center;
+          font-size: 14px;
+          color: var(--text-muted);
+          margin-bottom: 32px;
+        }
+        .song-form {
+          background: var(--bg-card);
+          border: 1px solid var(--border-color);
+          border-radius: 12px;
+          padding: 20px;
+          margin-bottom: 24px;
+        }
+        .song-form h2 {
+          font-size: 16px;
+          margin-bottom: 16px;
+          border-left: 4px solid var(--accent-color);
+          padding-left: 8px;
+        }
+        .input-group {
+          margin-bottom: 16px;
+        }
+        .input-group:last-child {
+          margin-bottom: 0;
+        }
+        label {
+          display: block;
+          font-size: 13px;
+          font-weight: bold;
+          margin-bottom: 8px;
+        }
+        input[type="text"] {
+          width: 100%;
+          padding: 10px 12px;
+          border-radius: 6px;
+          border: 1px solid var(--border-color);
+          background: var(--bg-color);
+          color: var(--text-main);
+          font-size: 14px;
+        }
+        .radio-group {
+          display: flex;
+          gap: 16px;
+          margin-top: 4px;
+        }
+        .radio-label {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 14px;
+          cursor: pointer;
+          font-weight: normal;
+        }
+        .radio-label input {
+          cursor: pointer;
+          width: 16px;
+          height: 16px;
+        }
+        .btn-submit {
+          width: 100%;
+          background-color: var(--accent-color);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          padding: 14px;
+          font-size: 16px;
+          font-weight: bold;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 48px;
+        }
+        .btn-submit:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+        .spinner {
+          width: 20px;
+          height: 20px;
+          border: 3px solid rgba(255,255,255,0.3);
+          border-radius: 50%;
+          border-top-color: #fff;
+          animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        #result-card {
+          border-top: 2px solid var(--accent-color);
+          padding-top: 16px;
+          margin-top: 32px;
+        }
+        .result-header {
+          text-align: center;
+          font-size: 18px;
+          font-weight: bold;
+          color: var(--text-main);
+          margin-bottom: 12px;
+        }
+        .result-body {
+          font-size: 14px;
+          line-height: 1.6;
+          white-space: pre-wrap;
+          background: var(--bg-card);
+          padding: 16px;
+          border-radius: 8px;
+          border: 1px solid var(--border-color);
+        }
+        .btn-x {
+          width: 100%;
+          background-color: #000000;
+          color: white;
+          border: 1px solid var(--border-color);
+          border-radius: 6px;
+          padding: 10px;
+          font-size: 14px;
+          font-weight: bold;
+          cursor: pointer;
+          margin-top: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        }
+        .btn-retry {
+          width: 100%;
+          background-color: transparent;
+          color: var(--text-muted);
+          border: 1px solid var(--border-color);
+          border-radius: 6px;
+          padding: 10px;
+          font-size: 14px;
+          cursor: pointer;
+          margin-top: 12px;
+        }
+      `}</style>
+    </div>
+  );
+}
