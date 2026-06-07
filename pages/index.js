@@ -1,9 +1,5 @@
 import { useState } from 'react';
 
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
-
 export default function Home() {
   const [formData, setFormData] = useState({
     artist1: '', title1: '', point1: 'メロディ',
