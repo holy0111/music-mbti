@@ -37,9 +37,14 @@ export default function Home() {
     }
   };
 
+  const handleShare = () => {
+    const text = encodeURIComponent("🎵 3曲でわかる音楽MBTI性格診断を試しました！\n\n" + (result ? result.substring(0, 100) : "") + "\n\n#音楽MBTI性格診断");
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+  };
+
   return (
     <div className="container">
-      <h1>🎵 音楽MBTI診断</h1>
+      <h1>🎵 3曲でわかる音楽MBTI性格診断</h1>
       
       {!result && !loading && (
         <form onSubmit={handleSubmit}>
@@ -63,50 +68,24 @@ export default function Home() {
       {result && (
         <div className="result-card">
           <div className="result-body">{result}</div>
+          <button className="btn-x" onClick={handleShare}>Xに結果をポストする</button>
           <button className="btn-retry" onClick={() => setResult('')}>もう一度診断する</button>
         </div>
       )}
 
-<style jsx>{`
-        /* 全体設定 */
-        .container {
-          max-width: 100%; /* スマホ時は画面いっぱいに */
-          width: 95%;      /* 少し余白を持たせる */
-          margin: 0 auto;
-          padding: 16px 8px;
-          color: var(--text-main);
-        }
-        
-        /* 診断結果のカード */
-        #result-card {
-          border-top: 4px solid var(--accent-color); /* 強調 */
-          padding-top: 20px;
-          margin-top: 24px;
-        }
-        
-        .result-header {
-          font-size: 20px; /* 少し大きく */
-          margin-bottom: 16px;
-        }
-        
-        .result-body {
-          font-size: 16px; /* 文字サイズをスマホ向けに読みやすく */
-          line-height: 1.8; /* 行間を広げて圧迫感をなくす */
-          background: var(--bg-card);
-          padding: 20px;
-          border-radius: 12px;
-        }
-
-        /* ボタンのサイズもスマホで押しやすく調整 */
-        .btn-x, .btn-retry {
-          padding: 14px;
-          font-size: 16px;
-          margin-top: 12px;
-        }
-
-        /* 既存のフォームなどはそのまま維持 */
-        .song-form { padding: 16px; margin-bottom: 16px; }
-        .btn-submit { padding: 16px; font-size: 18px; }
+      <style jsx global>{`
+        body { background: #0d1117; color: #c9d1d9; font-family: sans-serif; margin: 0; padding: 10px; }
+        .container { max-width: 500px; margin: 0 auto; width: 100%; }
+        h1 { text-align: center; font-size: 20px; color: #f0f6fc; margin-bottom: 20px; }
+        .song-form { background: #161b22; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #30363d; }
+        input { width: 100%; padding: 10px; margin: 5px 0; border-radius: 4px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; }
+        .radio-group { display: flex; gap: 15px; margin-top: 10px; font-size: 14px; }
+        .btn-submit { width: 100%; padding: 15px; background: #238636; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .loading { text-align: center; padding: 20px; }
+        .result-card { background: #161b22; padding: 20px; border-radius: 8px; border: 1px solid #30363d; }
+        .result-body { white-space: pre-wrap; font-size: 14px; line-height: 1.6; margin-bottom: 15px; }
+        .btn-x { width: 100%; padding: 10px; background: #000; color: white; border: 1px solid #30363d; border-radius: 6px; cursor: pointer; margin-bottom: 10px; }
+        .btn-retry { width: 100%; padding: 10px; background: #30363d; color: white; border: none; border-radius: 6px; cursor: pointer; }
       `}</style>
     </div>
   );
