@@ -39,7 +39,15 @@ export default function Home() {
   };
 
   const handleShare = () => {
-    const text = encodeURIComponent("🎵 3曲でわかる音楽MBTI性格診断を試しました！\n\n" + (result ? result.substring(0, 100) : "") + "\n\n#音楽MBTI性格診断");
+    // 💡 ここにあなたのサイトのURLを入れてください（VercelのURLなど）
+    const siteUrl = "https://music-mbti-eosin.vercel.app"; 
+    
+    const text = encodeURIComponent(
+      "🎵 3曲でわかる音楽MBTI性格診断を試しました！\n\n" + 
+      (result ? result.substring(0, 80) + "..." : "") + 
+      "\n\n診断はこちらから！\n" + siteUrl + 
+      "\n\n#音楽MBTI性格診断"
+    );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
   };
 
@@ -61,8 +69,12 @@ export default function Home() {
                 <input type="text" name={`artist${num}`} placeholder="アーティスト名" required onChange={handleChange} />
                 <input type="text" name={`title${num}`} placeholder="曲名" required onChange={handleChange} />
                 <div className="radio-group">
-                  <label><input type="radio" name={`point${num}`} value="メロディ" defaultChecked onChange={handleChange} /> メロディ</label>
-                  <label><input type="radio" name={`point${num}`} value="歌詞" onChange={handleChange} /> 歌詞</label>
+                  <label>
+                    <input type="radio" name={`point${num}`} value="メロディ" defaultChecked onChange={handleChange} /> メロディが好き
+                  </label>
+                  <label>
+                    <input type="radio" name={`point${num}`} value="歌詞" onChange={handleChange} /> 歌詞が好き
+                  </label>
                 </div>
               </div>
             ))}
@@ -87,7 +99,7 @@ export default function Home() {
         h1 { text-align: center; font-size: 1.5rem; color: #f0f6fc; margin-bottom: 20px; }
         .song-form { background: #161b22; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #30363d; }
         input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 4px; border: 1px solid #30363d; background: #0d1117; color: white; box-sizing: border-box; }
-        .radio-group { display: flex; gap: 20px; margin-top: 10px; font-size: 14px; }
+        .radio-group { display: flex; flex-direction: row; align-items: center; gap: 15px; margin-top: 10px; font-size: 14px; white-space: nowrap; }
         .btn-submit { width: 100%; padding: 16px; background: #238636; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
         .loading { text-align: center; padding: 40px; }
         .result-card { background: #161b22; padding: 25px; border-radius: 8px; border: 1px solid #30363d; }
