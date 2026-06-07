@@ -26,6 +26,7 @@ export default async function handler(req, res) {
     response_mode: "blocking",
     user: "music-user-session"
   };
+  console.log("Difyに送るデータ:", JSON.stringify(requestData, null, 2));
 
   try {
     const response = await fetch(DIFY_API_URL, {
