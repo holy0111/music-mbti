@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
   const DIFY_API_URL = 'https://api.dify.ai/v1/chat-messages';
   const DIFY_API_KEY = process.env.DIFY_API_KEY;
-  const GENIUS_ACCESS_TOKEN = process.env.GENIUS_ACCESS_TOKEN; // Vercelの環境変数に設定するか、直接文字列で 'あなたのトークン' を入れてもOK
+  const GENIUS_ACCESS_TOKEN = 'ijB0kjIMOXKZTp16mKiWBPQCsWRmG-v9WzhH77ONsr9bStae3qOBLXnnOQIXbShm'; // Vercelの環境変数に設定するか、直接文字列で 'あなたのトークン' を入れてもOK
 
   if (!DIFY_API_KEY) {
     return res.status(500).json({ message: 'Dify API Key is not configured on the server.' });
