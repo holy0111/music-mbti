@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       title2: title2,
       artist3: `${artist3}（好きな点：${point3}）`,
       title3: title3,
-      query: "フォームデータに基づいて、指定されたフォーマットで音楽MBTI性格診断を実行してください。"
+      query: "各楽曲の横にある『好きな点』の指定（メロディか歌詞か）を絶対的な基準として、指定されたフォーマットで診断を実行してください。"
     },
     query: "診断開始",
     response_mode: "blocking",
