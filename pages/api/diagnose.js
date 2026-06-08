@@ -10,23 +10,23 @@ export default async function handler(req, res) {
   const DIFY_API_URL = 'https://api.dify.ai/v1/chat-messages';
   const DIFY_API_KEY = process.env.DIFY_API_KEY;
   
-  // ★ここに あなたのGeniusトークンを直接シングルクォーテーションで囲んで貼り付けてください！
+  // ★ここに あなたのGeniusアクセストークン（Client Access Token）を貼り付けてください！
   const GENIUS_ACCESS_TOKEN = 'ijB0kjIMOXKZTp16mKiWBPQCsWRmG-v9WzhH77ONsr9bStae3qOBLXnnOQIXbShm'; 
 
   if (!DIFY_API_KEY) {
     return res.status(500).json({ message: 'Dify API Key is not configured on the server.' });
   }
 
-  // Geniusから曲の情報を検索する内部関数（公式URL直接アクセス版）
+  // Geniusから曲の情報を検索する内部関数（誤特定防止ガード版）
   async function searchGenius(artist, title) {
     if (!artist || !title || !GENIUS_ACCESS_TOKEN) return "";
     try {
-      // 修正ポイント：0.comy.workers.dev を完全に削除し、公式URLへ直接fetchします
+      // 公式URLへ直接アクセス
       const geniusRes = await fetch(`https://api.genius.com/search?q=${encodeURIComponent(artist + " " + title)}`, {
         headers: { 'Authorization': `Bearer ${GENIUS_ACCESS_TOKEN}` }
       });
 
-      // 返ってきた中身がJSON（プログラム用データ）かどうかを確認するガード処理
+      // 返ってきた中身がJSONデータかどうかを確認
       const contentType = geniusRes.headers.get("content-type");
       if (!contentType || !contentType.includes("application/json")) {
         console.log(`Geniusから無効なデータが返されたためスルーします: ${artist} - ${title}`);
@@ -35,8 +35,26 @@ export default async function handler(req, res) {
 
       const json = await geniusRes.json();
       const hits = json.response.hits;
+      
       if (hits && hits.length > 0) {
         const song = hits[0].result;
+        
+        // --- 【誤特定防止チェック】 ---
+        const lowerInputArtist = artist.toLowerCase().trim();
+        const lowerInputTitle = title.toLowerCase().trim();
+        const lowerGeniusArtist = song.primary_artist.name.toLowerCase();
+        const lowerGeniusTitle = song.title.toLowerCase();
+
+        // ユーザーが入力したアーティスト名、または曲名の「どちらか片方すら」Geniusの検索結果に含まれていない場合
+        const isArtistMatch = lowerGeniusArtist.includes(lowerInputArtist) || lowerInputArtist.includes(lowerGeniusArtist);
+        const isTitleMatch = lowerGeniusTitle.includes(lowerInputTitle) || lowerInputTitle.includes(lowerGeniusTitle);
+
+        if (!isArtistMatch && !isTitleMatch) {
+          console.log(`【誤特定を検知しスルー】入力: ${artist} - ${title} / Geniusヒット: ${song.primary_artist.name} - ${song.title}`);
+          return ""; // 全く関係ない曲と判断してURL結合をせず、安全に空文字を返す
+        }
+        // --- 【ここまで】 ---
+
         return ` (楽曲特定データ: Genius登録タイトル=${song.title}, アーティスト=${song.primary_artist.name}, 歌詞確認用URL=${song.url})`;
       }
       return "";
@@ -95,21 +113,4 @@ export default async function handler(req, res) {
 
     // --- スプレッドシートへのログ保存処理 ---
     try {
-      await fetch('https://script.google.com/macros/s/AKfycbwbEGBvYF43-8YL_7EIeUl_2imzp7ABm9KFPPqf43avzBZT2zRSK06J70VLL9ezYcRHCQ/exec', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          result: answer
-        })
-      });
-    } catch (e) {
-      console.error("スプレッドシートへの保存に失敗しました", e);
-    }
-
-    return res.status(200).json({ answer: answer });
-  } catch (error) {
-    console.error("サーバー内部エラー:", error);
-    return res.status(500).json({ message: 'Internal Server Error' });
-  }
-}
+      await fetch('
