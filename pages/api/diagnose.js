@@ -113,4 +113,21 @@ export default async function handler(req, res) {
 
     // --- スプレッドシートへのログ保存処理 ---
     try {
-      await fetch('
+      await fetch('https://script.google.com/macros/s/AKfycbwbEGBvYF43-8YL_7EIeUl_2imzp7ABm9KFPPqf43avzBZT2zRSK06J70VLL9ezYcRHCQ/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          result: answer
+        })
+      });
+    } catch (e) {
+      console.error("スプレッドシートへの保存に失敗しました", e);
+    }
+
+    return res.status(200).json({ answer: answer });
+  } catch (error) {
+    console.error("サーバー内部エラー:", error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
